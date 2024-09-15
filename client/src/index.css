@@ -1,0 +1,121 @@
+@media (max-width: 898px) {
+  header {
+    height: 50vh !important;
+  }
+}
+@media (max-width: 757px) {
+  header {
+    height: 44vh !important;
+  }
+}
+@media (max-width: 600px) {
+  header {
+    height: 38vh !important;
+  }
+}
+
+@media (max-width: 590px) {
+  header {
+    height: 33vh !important;
+  }
+}
+@media (max-width: 468px) {
+  header {
+    height: 29vh !important;
+  }
+}
+@media (max-width: 385px) {
+  header {
+    height: 20vh !important;
+  }
+}
+@media (max-width: 268px) {
+  header {
+    height: 15vh !important;
+  }
+}
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-secondary text-secondary bg-gradient-to-b from-[#F6FAFD] to-[#FFFFFF] bg-no-repeat;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-primary text-primary;
+  }
+
+  a {
+    @apply text-secondary font-semibold hover:text-accent-primary_hover transition;
+  }
+
+  .btn {
+    @apply text-lg h-[60px] px-[30px] rounded-full transition text-white;
+  }
+
+  .btn-primary {
+    @apply bg-accent-primary hover:bg-accent-primary_hover;
+  }
+
+  .btn-secondary {
+    @apply bg-accent-secondary hover:bg-accent-secondary_hover;
+  }
+
+  .btn-quaternary {
+    @apply bg-white text-base font-bold text-primary drop-shadow-primary hover:bg-accent-primary_hover hover:text-white;
+  }
+
+  .h1 {
+    @apply text-[40px] xl:text-[80px] font-bold leading-[1.1];
+  }
+
+  .h2 {
+    @apply text-[40px] font-bold leading-tight;
+  }
+
+  .h3 {
+    @apply text-[24px];
+  }
+
+  .lead {
+    @apply text-lg text-secondary font-secondary font-medium leading-relaxed;
+  }
+}
+
+.elementor-background-overlay {
+  background-color: #001689;
+  opacity: 0.57;
+  /* transition: background 0.3s, border-radius 0.3s, opacity 0.3s; */
+  height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    transition: background 0.3s, border-radius 0.3s, opacity 0.3s;
+}
+.elementor-background-video-container{
+  height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    overflow: hidden;
+    z-index: 0;
+    direction: ltr;
+    transition: opacity 1s;
+    pointer-events: none;
+}
+
+.filter{
+  backdrop-filter: saturate(200%) blur(25px)
+
+}

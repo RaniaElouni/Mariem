@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = "postgres://postgres:postgres@localhost:5432/gr"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  lastName  String?
+  bio       String?
+  age       Int?
+  email     String   @unique
+  password  String
+  role      Role     @default(Employe)
+  avatar    String?
+  createdAt DateTime @default(now())
+}
+
+
+model Intern {
+  id       String @id @default(uuid())
+  name     String
+  lastName String
+  tel      String
+  adress   String
+  email    String
+
+  cin          Int
+  birth        DateTime
+  debutDeStage DateTime  @default(now())
+  finDeStage   DateTime  @default(now())
+  services     Services? @relation(fields: [servicesId], references: [id])
+  servicesId   String?
+}
+
+model Services {
+  id             String           @id @default(uuid())
+  title          String
+  interns        Intern[]
+  serviceDemande ServiceDemande[]
+  offer          Offer[]
+}
+
+enum Role {
+  Stagiaire
+  Employe
+  Admin
+  Recruteur
+  ResponsableRH
+}
+
+model Offer {
+  id          String        @id @default(uuid())
+  title       String
+  type        String
+  description String        @db.Text
+  post  String?
+  created_at  DateTime      @default(now())
+  services    Services?     @relation(fields: [servicesId], references: [id])
+  servicesId  String?
+  demande     Demande[]
+  offerSkills OfferSkills[]
+}
+
+model OfferSkills {
+  id String @id @default(uuid())
+
+  Offer    Offer?  @relation(fields: [offerId], references: [id])
+  offerId  String?
+  Skills   Skills? @relation(fields: [skillsId], references: [id])
+  skillsId String?
+}
+
+model Skills {
+  id String @id @default(uuid())
+
+  name        String
+  offerSkills OfferSkills[]
+}
+
+model Demande {
+  id             String           @id @default(uuid())
+  name           String
+  lastName       String
+  age            Int
+  phoneNumber    Int
+  adress         String
+  email          String
+  cv             String
+  note           String
+  type           String
+  score          Float            @default(0)
+  Offer          Offer?           @relation(fields: [offerId], references: [id])
+  offerId        String?
+  serviceDemande ServiceDemande[]
+  matchedSkills  Json?
+  status         Status           @default(pending)
+  interviewed    Status           @default(pending)
+}
+
+model ServiceDemande {
+  id String @id @default(uuid())
+
+  demande    Demande?  @relation(fields: [demandeId], references: [id])
+  demandeId  String?
+  services   Services? @relation(fields: [servicesId], references: [id])
+  servicesId String?
+}
+
+model RendezVous {
+  id String @id @default(uuid())
+}
+
+model Lettre {
+  id            String @id @default(uuid())
+  type          String
+  contenuLettre String
+}
+
+enum Status {
+  pending
+  accepted
+  refused
+}
