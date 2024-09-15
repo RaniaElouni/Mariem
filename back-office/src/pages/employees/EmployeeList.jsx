@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { GridActionsCellItem, GridDeleteIcon } from '@mui/x-data-grid';
 import { MdRemoveRedEye } from 'react-icons/md';
+import { Avatar } from '@mui/material';
 
 function EmployeeList() {
     const [rows, setRows] = useState([]);
@@ -24,7 +25,7 @@ function EmployeeList() {
             headerName: 'Avatar',
             width: 120,
             renderCell: (params) => (
-              <img
+          console.log(params,"this is params from renderCell"),   params.value?<Avatar>{params.row.name[0]}</Avatar>: <img
               
                 src={params.value}
                 alt="Avatar"

@@ -190,6 +190,9 @@ const Main = () => {
                 localStorage.clear();
                 window.location.href = '/';
               }
+              else if ( setting === "Profile") {
+                navigate('/profile')
+              }
             }}
           >
             <Typography textAlign="center">{setting}</Typography>

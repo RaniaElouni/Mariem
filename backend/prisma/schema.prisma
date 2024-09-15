@@ -24,8 +24,8 @@ model User {
   role      Role     @default(Employe)
   avatar    String?
   createdAt DateTime @default(now())
+  stagaires Intern[]
 }
-
 
 model Intern {
   id       String @id @default(uuid())
@@ -41,6 +41,8 @@ model Intern {
   finDeStage   DateTime  @default(now())
   services     Services? @relation(fields: [servicesId], references: [id])
   servicesId   String?
+  encadrant         User?     @relation(fields: [encadrantId], references: [id])
+  encadrantId       String?
 }
 
 model Services {
@@ -64,7 +66,7 @@ model Offer {
   title       String
   type        String
   description String        @db.Text
-  post  String?
+  post        String?
   created_at  DateTime      @default(now())
   services    Services?     @relation(fields: [servicesId], references: [id])
   servicesId  String?
