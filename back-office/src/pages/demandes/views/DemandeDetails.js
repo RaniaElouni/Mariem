@@ -14,8 +14,24 @@ import Chip from "@mui/joy/Chip";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import TextField from "@mui/material/TextField";
 export default function DemandeDetails() {
   const [show, setShow] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    age: "",
+    phoneNumber: "",
+  })
+  const handleSave = () => {
+    // Handle form submission or further processing here
+    console.log("Form Data Submitted: ", formData);
+    handleClose(); // Close the modal after saving
+  };
 
   const location = useLocation();
   const { row } = location.state || {};
@@ -39,6 +55,12 @@ export default function DemandeDetails() {
     );
     handleShow();
   };
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
     <div className="card">
@@ -54,6 +76,7 @@ export default function DemandeDetails() {
             </MDBCard>
           </MDBCol>
         </MDBRow>
+
         <MDBRow>
           <MDBCol lg="8" className="mt-2">
             <MDBCard className="mb-4">
@@ -135,6 +158,7 @@ export default function DemandeDetails() {
             <HeaderPage parent="Demande" firstChild={"Matched Skills"} />
             {row.matchedSkills.map((elem, i) => (
               <Chip
+                key={i}
                 variant="filled"
                 color="primary"
                 size="sm"
@@ -197,22 +221,65 @@ export default function DemandeDetails() {
           </button>
         </div>
       </div>
-      <>
-        <Modal show={show} onHide={handleClose} style={{zIndex:999}}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </>
+      <Dialog open={show} onClose={handleClose}>
+        <DialogTitle>Confirmation </DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            name="name"    
+            label="Name"
+            type="text"
+            fullWidth
+            value= {row.name+" "+row.lastName}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="email"
+            label="Email"
+            type="email"
+            fullWidth
+            value= {row.email}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="age"
+            label="Age"
+            type="number"
+            fullWidth
+            value= {row.age}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="phoneNumber"
+            label="Phone Number"
+            type="tel"
+            fullWidth
+            value={row.phoneNumber}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="password"
+            label="password"
+            type="tel"  
+            fullWidth
+            value={""}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} className="btn btn-danger">
+            Cancel
+          </Button>
+          <Button onClick={handleSave} className="btn btn-success">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
