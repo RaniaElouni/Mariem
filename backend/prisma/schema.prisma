@@ -30,15 +30,14 @@ model User {
 model Intern {
   id       String @id @default(uuid())
   name     String
-  lastName String
+  lastName String?
   tel      String
-  adress   String
+  adress   String?
   email    String
 
-  cin          Int
-  birth        DateTime
+  cin          Int?
+  birth        DateTime?
   debutDeStage DateTime  @default(now())
-  finDeStage   DateTime  @default(now())
   services     Services? @relation(fields: [servicesId], references: [id])
   servicesId   String?
   encadrant         User?     @relation(fields: [encadrantId], references: [id])
