@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {  useLocation, useNavigate } from "react-router-dom";
+import Option from "@mui/joy/Option";
+
 import {
   MDBCol,
   MDBContainer,
@@ -19,14 +21,35 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
+import { Autocomplete, FormControl, FormLabel, Select } from "@mui/material";
 export default function DemandeDetails() {
   const [show, setShow] = useState(false);
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployee,setSelectedEmployee] = useState(null)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     age: "",
     phoneNumber: "",
   })
+
+  const roles = {
+    Stagiaire: "Stagiaire",
+    Employe: "Employe",
+    Admin: "Admin",
+    Recruteur: "Recruteur",
+    ResponsableRH: "ResponsableRH",
+  };
+
+  const fetchEmployess = async () => {
+    const response = await axios.get("http://localhost:4000/users");
+    setEmployees(response.data);
+  };
+  const navigate = useNavigate()
+
+  useEffect(() => {
+      fetchEmployess();
+  }, []);
   const handleSave = () => {
     // Handle form submission or further processing here
     console.log("Form Data Submitted: ", formData);
@@ -41,6 +64,22 @@ export default function DemandeDetails() {
   }
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+const handleSumbit = async (e) => {
+  if(row.type === "offre d'emploi"){
+    axios.post("http://localhost:4000/users", e)
+    .then((res)=>{
+      navigate("/employees")
+    })
+    .catch(err=>console.log(err))
+}
+else {
+  axios.post("http://localhost:4000/stagaires", e).then((res)=>{
+    navigate("/stagaires")
+  }).catch(err=>console.log(err)
+  )
+}
+}
   const updateStatus = async (status) => {
     const body = {
       status: status,
@@ -61,7 +100,9 @@ export default function DemandeDetails() {
       [e.target.name]: e.target.value,
     });
   };
+  console.log(formData,"this is form data")
 
+ 
   return (
     <div className="card">
       <div className="mx-5">
@@ -214,6 +255,7 @@ export default function DemandeDetails() {
           <button
             className="btn btn-danger btn-lg"
             onClick={() => {
+             navigate(-1)
               updateStatus("refused");
             }}
           >
@@ -221,7 +263,7 @@ export default function DemandeDetails() {
           </button>
         </div>
       </div>
-      <Dialog open={show} onClose={handleClose}>
+      <Dialog open={show} onClose={handleClose} >
         <DialogTitle>Confirmation </DialogTitle>
         <DialogContent>
           <TextField
@@ -261,21 +303,55 @@ export default function DemandeDetails() {
             value={row.phoneNumber}
             onChange={handleInputChange}
           />
-          <TextField
+        { row.type === "offre d'emploi" ? <div> <TextField
             margin="dense"
             name="password"
             label="password"
-            type="tel"  
+            type="password"  
             fullWidth
-            value={""}
-            onChange={handleInputChange}
-          />
+            typeof="password"
+            onChange={(e)=>setSelectedEmployee({...selectedEmployee , password : e.target.value})}
+          />  <div>
+         <Autocomplete
+          disablePortal
+          options={[ "ResponsableRH", "Recruteur","Admin","Employe"]}
+          getOptionLabel={(option) => option}
+          onChange={(e,value)=>setSelectedEmployee({...selectedEmployee , role : value})}
+          sx={{ width: "100%" }}
+          renderInput={(params) => <TextField {...params} label="Role" />}
+        />
+        </div></div>:    <Autocomplete
+          disablePortal
+          options={employees}
+          onChange={(e,value)=>setSelectedEmployee({...selectedEmployee , encadrantId : value})}
+          getOptionLabel={(option) => option.name}
+          sx={{ width: "100%" }}
+          renderInput={(params) => <TextField {...params} label="Supervisor" />}
+        />}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} className="btn btn-danger">
             Cancel
           </Button>
-          <Button onClick={handleSave} className="btn btn-success">
+          <Button onClick={()=>{
+            if(row.type === "offre d'emploi"){
+              handleSumbit({
+                name : row.name+" "+row.lastName , 
+                email : row.email,
+                age : row.age,
+                role : selectedEmployee.role , 
+                password : selectedEmployee.password
+              })
+            }
+            else {
+              handleSumbit({
+                name : row.name+" "+row.lastName , 
+                email : row.email,
+                tel : ""+row.phoneNumber,
+                encadrantId : selectedEmployee.encadrantId.id
+              })
+            }
+          }} className="btn btn-success">
             Save
           </Button>
         </DialogActions>
