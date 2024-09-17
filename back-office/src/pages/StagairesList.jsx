@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import HeaderPage from '../../components/HeaderPage';
-import Liste from '../../components/Liste';
+
+
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { GridActionsCellItem, GridDeleteIcon } from '@mui/x-data-grid';
 import { MdRemoveRedEye } from 'react-icons/md';
 import { Avatar } from '@mui/material';
+import Liste from '../components/Liste';
+import HeaderPage from '../components/HeaderPage';
 
-function EmployeeList() {
+function StagairesList() {
     const [rows, setRows] = useState([]);
     const navigate = useNavigate()
   
     const fetchEmployess = async () => {
-      const response = await axios.get("http://localhost:4000/users");
+      const response = await axios.get("http://localhost:4000/stagaires");
       setRows(response.data);
     };
   
@@ -27,7 +29,7 @@ function EmployeeList() {
             renderCell: (params) => (
           console.log(params,"this is params from renderCell"),  <img
               
-                src={params.value}
+                src={params.value?params.value:"https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg"}    
                 onError={(e) => e.target.src = "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg"}
                 alt="Avatar"
                 style={{ width: 50, height: 50,borderRadius:"50%",objectFit:"cover" }}
@@ -60,48 +62,23 @@ function EmployeeList() {
           editable: true,
         },
         {
-          field: 'role',
-          headerName: 'Role',
+          field: 'encadrant',
+          headerName: 'Encadrant',
           width: 150,
           editable: true,
-          valueGetter: (params) => params,
+          valueGetter: (params) => params?.endradrant?.name,
         },
      
-     
-        // {
-        //   field: 'actions',
-        //   headerName: 'Actions',
-        //   type: 'actions',
-        //   width: 300,
-        //   getActions: (params) => [
-        //     <GridActionsCellItem
-        //       icon={<GridDeleteIcon />}
-        //       // onClick={() => {
-        //       //   setSelectId(params.row.id);
-        //       //   handleClickOpen();
-        //       // }}
-        //       label="Delete"
-        //     />,
-        //     <GridActionsCellItem
-        //       icon={<MdRemoveRedEye  style={{ fontSize: '20px' }}/>}
-             
-        //     //   onClick={() => navigate(`user-detail/${params.row.id}`)}
-        //       label="View"
-        //     />,
-        //   ],
-        // },
       ];
     return (
       <div>
-        <HeaderPage parent={"Employees"} firstChild={"List"}/>
+        <HeaderPage parent={"Stagaires"} firstChild={"List"}/>
         <div class="d-flex justify-content-end my-4">
-          <button className="btn btn-primary " onClick={() => navigate("add-employee")}>
-           Add Employee
-          </button>
+       
         </div>
         <Liste rows={rows} columns={columns} />
       </div>
     )
 }
 
-export default EmployeeList
+export default StagairesList

@@ -33,10 +33,7 @@ import { MyContext } from "../router/Router";
 // import { toast } from "react-toastify";
 import axios from "axios";
 import { Avatar } from "@mui/material";
-// import DropZone from '../components/DropZone';
-// import FileUpload from '../components/FileUpload';
-// import CountrySelector from '../components/CountrySelector'
-// import EditorToolbar from './EditorToolbar';
+
 
 export default function Profile({ update, setUpdate }) {
   const usr = React.useContext(MyContext);

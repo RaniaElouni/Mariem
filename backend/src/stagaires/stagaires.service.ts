@@ -6,12 +6,16 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class StagairesService {
   constructor(private prisma: PrismaService) {}
-  create(createStagaireDto: CreateStagaireDto) {
-    return 'This action adds a new stagaire';
+ async create(createStagaireDto: CreateStagaireDto) {
+    return await this.prisma.intern.create({data:createStagaireDto})
   }
 
  async findAll() {
-    return await this.prisma.intern.findMany({})
+    return await this.prisma.intern.findMany({
+      include : {
+        encadrant : true
+      }
+    })
   }
 
   findOne(id: number) {

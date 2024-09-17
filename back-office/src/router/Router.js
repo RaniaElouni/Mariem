@@ -31,6 +31,7 @@ import DemandeDetails from "../pages/demandes/views/DemandeDetails";
 import Employees from "../pages/employees/Employees";
 import EmployeeList from "../pages/employees/EmployeeList";
 import AddEmp from "../pages/employees/AddEmp";
+import StagairesList from "../pages/StagairesList";
 // export default function Router() {
 //   const user = true;
 
@@ -91,6 +92,19 @@ const Router = () => {
                   <Route path="add-employee" element={<AddEmp />} />
 
                 </Route>
+                <Route
+                  path="stagaires"
+                 
+                  element={
+                    <PrivateRoute
+                    component={<StagairesList  />}
+                      roles={["Admin", "ResponsableRH"]}
+                    />
+                  } /
+                >
+          
+
+          
                 
                 <Route
                   path="joboffre"
